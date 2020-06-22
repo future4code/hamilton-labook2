@@ -11,6 +11,8 @@ app.use(express.json());
 
 app.use(routes);
 
+
+
 const server = app.listen(process.env.PORT || 3333, () => {
   if (server) {
     const address = server.address() as AddressInfo;
