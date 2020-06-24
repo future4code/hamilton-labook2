@@ -22,4 +22,5 @@ export default class UserDatabase extends BaseDatabase {
       .from(UserDatabase.TABLE_NAME);
     return result[0];
   }
+  
 }
