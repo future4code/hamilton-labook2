@@ -1,10 +1,9 @@
 import { Router } from "express";
 import PostDatabase from "../data/PostDatabase";
 import CustomError from "../err/CustomError";
-import IdGenerator from "../services/IdGenerator";
 import Post from "../models/Post";
 import Authenticator from "../services/Authenticator";
-import moment  from "moment"
+import IdGenerator from "../services/IdGenerator";
 
 const postRouter = Router();
 

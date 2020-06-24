@@ -1,6 +1,5 @@
-import BaseDatabase from "./BaseDatabase";
 import User from "../models/User";
-import { response } from "express";
+import BaseDatabase from "./BaseDatabase";
 
 export default class UserDatabase extends BaseDatabase {
   private static readonly TABLE_NAME: string = "labook_users";
@@ -22,5 +21,4 @@ export default class UserDatabase extends BaseDatabase {
       .from(UserDatabase.TABLE_NAME);
     return result[0];
   }
-  
 }
