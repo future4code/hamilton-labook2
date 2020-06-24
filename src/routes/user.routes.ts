@@ -5,6 +5,7 @@ import Authenticator from "../services/Authenticator";
 import UserDatabase from "../data/UserDatabase";
 import User from "../models/User";
 import CustomError from "../err/CustomError";
+import RelationshipDatabase from "../data/RelationshipDatabase";
 
 const userRoute = Router();
 
@@ -73,5 +74,70 @@ userRoute.post("/login", async (request, response) => {
     }
   }
 });
+
+userRoute.post("/makefriendship", async (request, response)=>{
+  try{
+    const userToMakeFriendship = {
+      id: request.body.friend_id
+    };
+
+    const token = request.headers.authorization as string;
+
+    const authenticator = new Authenticator();
+    const user = authenticator.getData(token);
+
+    const RelationshipDb = new RelationshipDatabase();
+    const userFriends = await RelationshipDb.getFriendById(user.id);
+
+    for(let i = 0; i < userFriends.length; i++){
+      if(userFriends[i].friend_id === userToMakeFriendship.id){
+        throw new CustomError("You are already friends", 400)
+      }
+
+    }
+    // console.log(userFriends);
+    
+    await RelationshipDb.makeFriendship(userToMakeFriendship.id, user.id);
+
+    response.status(200).send({
+      message: "Friendship successfully"
+    });
+  } catch(error){
+    response.status(400).send({message: error.message});
+  }
+
+})
+
+userRoute.delete("/deletefriendship", async (request, response)=>{
+  try{
+    const deleteFriendId = {
+      id: request.body.friend_id
+    };
+    const token = request.headers.authorization as string;
+
+    if(!token || !deleteFriendId){
+      throw new CustomError("Invalid token or id", 400)
+    }
+
+    const authenticator = new Authenticator();
+    const user = authenticator.getData(token);
+
+    const RelationshipDb = new RelationshipDatabase();
+    const userFriend = await RelationshipDb.getFriendById(user.id);
+
+    if(!userFriend){
+      throw new CustomError("Invalid", 400);
+    }
+    await RelationshipDb.deleteFriendship(user.id, deleteFriendId.id);
+    
+    response.status(200).send({
+      message: "Successfully deleted"
+    });
+
+  }catch(error){
+    response.status(400).send({message: error.message});
+  }
+})
+
 
 export default userRoute;
