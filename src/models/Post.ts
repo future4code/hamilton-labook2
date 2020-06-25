@@ -17,3 +17,24 @@ export default interface Post {
   export interface GetFeedDTO {
     user_id: string;
   }
+
+  export interface GetFeedByTypeDTO {
+    type: string,
+
+  }
+
+  export enum PostType {
+    NORMAL = "normal",
+    EVENT = "event"
+  }
+
+  export const toUserType = (value: string): PostType => {
+    switch (value) {
+      case "normal": 
+      return PostType.NORMAL;        
+      case "event": 
+      return PostType.EVENT;        
+      default: 
+      return PostType.NORMAL;
+    }
+  }

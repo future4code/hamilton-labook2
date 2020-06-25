@@ -23,7 +23,7 @@ export default class PostDatabase extends BaseDatabase {
 
     const feed =  await this.getConnection().raw (
       `
-      SELECT labook_users.name, labook_posts.created_at, labook_posts.description, labook_posts.photo
+      SELECT labook_users.name, labook_posts.created_at, labook_posts.description, labook_posts.photo, labook_posts.type
       FROM labook_posts
       JOIN labook_users
       ON labook_posts.user_id = labook_users.id
@@ -34,9 +34,20 @@ export default class PostDatabase extends BaseDatabase {
       OR labook_posts.user_id IN (
       SELECT user_id 
       FROM labook_relationship
-      WHERE friend_id = "${id}");
+      WHERE friend_id = "${id}")
+      ORDER BY created_at DESC;
       `
     )
-        return feed[0]
-  }
-}
+        return feed[0];
+  };
+
+  public async getFeedByType(type: string): Promise<any> {
+    const result = await this.getConnection().raw (
+      `
+      SELECT * FROM labook_posts WHERE type = "${type}" ORDER BY created_at DESC;
+      `
+    )
+    
+    return result[0];
+  };
+};
