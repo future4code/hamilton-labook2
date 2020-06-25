@@ -7,3 +7,13 @@ export default interface Post {
     user_id: string;
   }
   
+  export interface CreatePostDTO {
+    photo: string;
+    description: string;
+    type: string;
+    user_id: string;
+  }
+
+  export interface GetFeedDTO {
+    user_id: string;
+  }
