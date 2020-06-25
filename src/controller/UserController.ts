@@ -1,12 +1,7 @@
 import { Request, Response } from "express";
+import UserBusiness from "../business/UserBusiness";
 import CustomError from "../err/CustomError";
-import RelationshipDatabase from "../data/RelationshipDatabase";
 import Authenticator from "../services/Authenticator";
-import UserDatabase from "../data/UserDatabase";
-import HashManager from "../services/HashManager";
-import IdGenerator from "../services/IdGenerator";
-import User from "../models/User";
-import UserBusiness from "../business/userBusiness";
 
 export default class UserController {
   public async deleteFriendship(request: Request, response: Response) {
