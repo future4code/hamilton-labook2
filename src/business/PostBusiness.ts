@@ -1,5 +1,5 @@
 import Post, {
-    CreatePostDTO
+    CreatePostDTO, toUserType
 } from "../models/Post";
 import PostDatabase from "../data/PostDatabase";
 import IdGenerator from "../services/IdGenerator";
@@ -25,16 +25,23 @@ export default class PostBusiness {
              await postDatabase.createPost(newPost);
 
              return newPost;
-        }
+        };
+
     public async getFeed(id: string) {
 
         const postDatabase = new PostDatabase();
         // const getFeed: Post = {
         //     user_id
         // };
-        return await postDatabase.getFeed(id)
+        return await postDatabase.getFeed(id);
+        };
+    
+    public async getPostType(type: string) {
+        const postDatabase = new PostDatabase();
 
+        const postType = await postDatabase.getFeedByType(toUserType(type));
 
-    }
+        return postType;
+    };
     
 }

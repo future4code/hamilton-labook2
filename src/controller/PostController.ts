@@ -37,16 +37,33 @@ export default class PostController {
 
         const userId = authenticator.getData(token);
 
-        const newFeed = await new PostBusiness().getFeed(
-            userId.id
-        )
+        const newFeed = await new PostBusiness().getFeed(userId.id);
 
-        response.status(200).send(newFeed)
+        response.status(200).send(newFeed);
 
         } catch(err) {
         response.status(400).send ({
             message: err.message,
-        })
-    }
-    } 
+        });
+    };
+    }; 
+    public async getFeedByType(request: Request, response: Response) {
+        try {
+            const token = request.headers.authorization as string;
+
+            const type = request.body.type;
+
+            const authenticator = new Authenticator();
+
+            const userId = authenticator.getData(token);
+
+            const feedByType = await new PostBusiness().getPostType(type);
+
+            response.status(200).send({feedByType});            
+        } catch(err) {
+            response.status(400).send ({
+                message: err.message,
+            });
+    };
+    };
 }
