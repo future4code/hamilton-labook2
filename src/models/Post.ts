@@ -19,8 +19,17 @@ export default interface Post {
   }
 
   export interface GetFeedByTypeDTO {
-    type: string,
+    type: string;
+  }
 
+  export interface AddLikeTDO{
+    post_id: string;
+    user_id: string;
+  }
+
+  export interface RemoveLikeTDO {
+    post_id: string;
+    user_id: string;
   }
 
   export enum PostType {

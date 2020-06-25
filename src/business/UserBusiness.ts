@@ -14,7 +14,7 @@ import IdGenerator from "../services/IdGenerator";
 export default class UserBusiness {
   public async deleteFriendship({ friend_id, user_id }: DeleteFriendshipDTO) {
     if (!friend_id) {
-      throw new CustomError("Plase insert a correct Id", 400);
+      throw new CustomError("Please insert a correct Id", 400);
     }
 
     const RelationshipDb = new RelationshipDatabase();
