@@ -44,6 +44,18 @@ export default class PostBusiness {
     const postType = await postDatabase.getFeedByType(toUserType(type));
 
     return postType;
+  };
+
+  public async getFeedByTypeAndPage(type: string, page: number) {
+    const postDatabase = new PostDatabase();
+
+    const postsPerPage = 3;
+
+    let offset = postsPerPage * (page -1);
+
+    const postType = await postDatabase.getFeedByTypeAndPage(toUserType(type), postsPerPage, offset);
+
+    return postType;
   }
 
   public async addLike(post_id: string, user_id: string) {

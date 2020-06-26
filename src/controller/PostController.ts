@@ -47,6 +47,7 @@ export default class PostController {
       });
     }
   }
+
   public async getFeedByType(request: Request, response: Response) {
     try {
       const token = request.headers.authorization as string;
@@ -64,8 +65,30 @@ export default class PostController {
       response.status(400).send({
         message: err.message,
       });
-    }
-  }
+    };
+  };
+
+  public async getFeedByTypeAndPage(request: Request, response: Response) {
+    try {
+      const token = request.headers.authorization as string;
+
+      const type = request.body.type;
+
+      const page: number = Number(request.body.page) >=1 ?Number(request.body.page): 1;
+
+      const authenticator = new Authenticator();
+
+      const userId = authenticator.getData(token);
+
+      const feedByType = await new PostBusiness().getFeedByTypeAndPage(type, page);
+
+      response.status(200).send({ feedByType });
+    } catch (err) {
+      response.status(400).send({
+        message: err.message,
+      });
+    };
+  };
 
   public async addLike(request: Request, response: Response){
       try{

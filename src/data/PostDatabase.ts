@@ -47,7 +47,20 @@ export default class PostDatabase extends BaseDatabase {
     );
 
     return result[0];
-  }
+  };
+
+  public async getFeedByTypeAndPage(type: string, postsPerPage: number, offset: number): Promise<any> {
+    const result = await this.getConnection().raw(
+      `
+      SELECT * FROM labook_posts 
+      WHERE type = "${type}" 
+      ORDER BY created_at DESC 
+      LIMIT ${postsPerPage} OFFSET ${offset};
+      `
+    );
+
+    return result[0];
+  };
 
   public async getPostLiked(post_id: string, user_id: string): Promise<any> {
     const result = await this.getConnection()
