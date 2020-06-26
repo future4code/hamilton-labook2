@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import UserBusiness from "../business/UserBusiness";
 import CustomError from "../err/CustomError";
 import Authenticator from "../services/Authenticator";
+import RefreshTokenBusiness from "../business/RefreshTokenBusiness";
 
 export default class UserController {
   public async deleteFriendship(request: Request, response: Response) {
@@ -59,12 +60,12 @@ export default class UserController {
     const { email, password } = request.body;
 
     try {
-      const token = await new UserBusiness().login({
+      const { accessToken, refreshToken } = await new UserBusiness().login({
         email,
         password,
       });
 
-      response.status(200).send({ token });
+      response.status(200).send({ accessToken, refreshToken });
     } catch (err) {
       if (err instanceof CustomError)
         response.status(err.status).send({ error: err.message });
@@ -78,13 +79,13 @@ export default class UserController {
     const { name, email, password } = request.body;
 
     try {
-      const token = await new UserBusiness().signUp({
+      const { accessToken, refreshToken } = await new UserBusiness().signUp({
         name,
         email,
         password,
       });
 
-      response.status(200).send({ token });
+      response.status(200).send({ accessToken, refreshToken });
     } catch (err) {
       if (err instanceof CustomError)
         response.status(err.status).send({ error: err.message });

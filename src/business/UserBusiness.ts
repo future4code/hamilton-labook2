@@ -10,6 +10,7 @@ import UserDatabase from "../data/UserDatabase";
 import HashManager from "../services/HashManager";
 import Authenticator from "../services/Authenticator";
 import IdGenerator from "../services/IdGenerator";
+import RefreshTokenBusiness from "./RefreshTokenBusiness";
 
 export default class UserBusiness {
   public async deleteFriendship({ friend_id, user_id }: DeleteFriendshipDTO) {
@@ -66,13 +67,16 @@ export default class UserBusiness {
     if (!correctPassword)
       throw new CustomError("Email or password is incorrect", 400);
 
-    const token = new Authenticator().generateToken({ id: user.id });
+    const accessToken = new Authenticator().generateToken({ id: user.id });
 
-    return token;
+    const refreshToken = await new RefreshTokenBusiness().createRefreshToken(
+      user.id
+    );
+
+    return { accessToken, refreshToken };
   }
 
-  public async signUp({ name, email, password }: signUpDTO){
-
+  public async signUp({ name, email, password }: signUpDTO) {
     const userDatabase = new UserDatabase();
 
     const userExist = await userDatabase.getUserByEmail(email);
@@ -90,11 +94,14 @@ export default class UserBusiness {
       password: hashedPassword,
     };
 
-    const token = new Authenticator().generateToken({ id });
+    const accessToken = new Authenticator().generateToken({ id });
 
     await userDatabase.createUser(userData);
 
-    return(token)
+    const refreshToken = await new RefreshTokenBusiness().createRefreshToken(
+      id
+    );
 
+    return { accessToken, refreshToken };
   }
 }
